@@ -27,4 +27,6 @@ public/js
 .DS_Store
 coverages
 _ide_helper.php
+secrets.yml
 volumes
+docker-build

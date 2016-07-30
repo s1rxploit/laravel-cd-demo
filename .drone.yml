@@ -18,3 +18,23 @@ build:
     - mysql -u$DB_USERNAME -p$DB_PASSWORD -e "CREATE DATABASE $DB_DATABASE CHARACTER SET utf8;"
     - php artisan migrate
     - vendor/bin/phpunit
+publish:
+  docker:
+    environment:
+      - DOCKER_LAUNCH_DEBUG=true
+    username: $$DOCKER_USERNAME
+    password: $$DOCKER_PASSWORD
+    email: $$DOCKER_EMAIL
+    repo: framgia/laravel-cd-demo
+    tag:
+      - latest
+      - production
+    file: Dockerfile
+    insecure: false
+    load: docker-build/laravel-cd-demo.tar
+    save:
+      destination: docker-build/laravel-cd-demo.tar
+      tag: latest
+cache:
+  mount:
+    - docker-build/laravel-cd-demo.tar
