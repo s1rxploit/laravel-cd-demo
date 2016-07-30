@@ -11,7 +11,10 @@ build:
     - SESSION_DRIVER=file
     - QUEUE_DRIVER=sync
   commands:
+    - supervisord &
     - chmod -R 777 storage/
     - chmod -R 777 bootstrap/cache/
     - composer install
+    - mysql -u$DB_USERNAME -p$DB_PASSWORD -e "CREATE DATABASE $DB_DATABASE CHARACTER SET utf8;"
+    - php artisan migrate
     - vendor/bin/phpunit
