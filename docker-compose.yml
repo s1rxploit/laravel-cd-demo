@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  laravel:
+    container_name: laravel-demo
+    restart: always
+    image: framgia/laravel
+    volumes:
+      - .:/var/www/html
+      - ./laravel.conf:/etc/nginx/sites-available/default
+      - ./volumes/redis:/data
+      - ./volumes/mongo:/data/db
+    ports:
+      - "8080:80"
