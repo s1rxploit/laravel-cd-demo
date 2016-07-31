@@ -1,20 +1,17 @@
 build:
   image: framgia/laravel
   environment:
-    - APP_ENV=testing
-    - APP_KEY=base64:3Qnvvim9MN5zjCg3M0cy1ATy/qWISiJOldYPIv3hq5g=
     - DB_HOST=localhost
     - DB_DATABASE=demo
     - DB_USERNAME=root
     - DB_PASSWORD=root
-    - CACHE_DRIVER=file
-    - SESSION_DRIVER=file
-    - QUEUE_DRIVER=sync
   commands:
     - supervisord &
     - chmod -R 777 storage/
     - chmod -R 777 bootstrap/cache/
+    - cp .env.testing .env
     - composer install
+    - sleep 15
     - mysql -u$DB_USERNAME -p$DB_PASSWORD -e "CREATE DATABASE $DB_DATABASE CHARACTER SET utf8;"
     - php artisan migrate
     - vendor/bin/phpunit
@@ -28,11 +25,8 @@ publish:
     password: $$DOCKER_PASSWORD
     email: $$DOCKER_EMAIL
     repo: framgia/laravel-cd-demo
+    file: Dockerfile.staging
     tag: staging
-    load: docker-build/laravel-cd-demo.tar
-    save:
-      destination: docker-build/laravel-cd-demo.tar
-      tag: staging
   docker:
     environment:
       - DOCKER_LAUNCH_DEBUG=true
@@ -42,11 +36,26 @@ publish:
     password: $$DOCKER_PASSWORD
     email: $$DOCKER_EMAIL
     repo: framgia/laravel-cd-demo
+    file: Dockerfile.production
     tag: latest
-    load: docker-build/laravel-cd-demo.tar
-    save:
-      destination: docker-build/laravel-cd-demo.tar
-      tag: latest
+deploy:
+  rancher:
+    url: $$RANCHER_URL
+    access_key: $$RANCHER_ACCESS_KEY
+    secret_key: $$RANCHER_SECRET_KEY
+    service: $$RANCHER_SERVICE_STAGING
+    docker_image: framgia/laravel-cd-demo:staging
+    when:
+      branch: develop
+  rancher:
+    url: $$RANCHER_URL
+    access_key: $$RANCHER_ACCESS_KEY
+    secret_key: $$RANCHER_SECRET_KEY
+    service: $$RANCHER_SERVICE_PRODUCTION
+    docker_image: framgia/laravel-cd-demo:latest
+    when:
+      branch: [master, release]
 cache:
   mount:
-    - docker-build/laravel-cd-demo.tar
+    - .git
+    - vendor
