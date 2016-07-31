@@ -20,17 +20,25 @@ build:
     - vendor/bin/phpunit
 publish:
   docker:
-    environment:
-      - DOCKER_LAUNCH_DEBUG=true
+    when:
+      branch: develop
     username: $$DOCKER_USERNAME
     password: $$DOCKER_PASSWORD
     email: $$DOCKER_EMAIL
     repo: framgia/laravel-cd-demo
-    tag:
-      - latest
-      - production
-    file: Dockerfile
-    insecure: false
+    tag: staging
+    load: docker-build/laravel-cd-demo.tar
+    save:
+      destination: docker-build/laravel-cd-demo.tar
+      tag: staging
+  docker:
+    when:
+      branch: [master, release]
+    username: $$DOCKER_USERNAME
+    password: $$DOCKER_PASSWORD
+    email: $$DOCKER_EMAIL
+    repo: framgia/laravel-cd-demo
+    tag: latest
     load: docker-build/laravel-cd-demo.tar
     save:
       destination: docker-build/laravel-cd-demo.tar
