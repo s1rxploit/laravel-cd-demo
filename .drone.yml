@@ -20,6 +20,8 @@ build:
     - vendor/bin/phpunit
 publish:
   docker:
+    environment:
+      - DOCKER_LAUNCH_DEBUG=true
     when:
       branch: develop
     username: $$DOCKER_USERNAME
@@ -32,6 +34,8 @@ publish:
       destination: docker-build/laravel-cd-demo.tar
       tag: staging
   docker:
+    environment:
+      - DOCKER_LAUNCH_DEBUG=true
     when:
       branch: [master, release]
     username: $$DOCKER_USERNAME
