@@ -52,7 +52,7 @@ class UserTest extends TestCase
             ->type('validpassword', 'password_confirmation')
             ->press('Register')
             ->seePageIs('/')
-            ->see('ThangTD');
+            ->see('ThangTDi');
     }
 
     /** @test */
