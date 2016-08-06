@@ -1,21 +1,25 @@
 build:
-  image: framgia/laravel
-  environment:
-    - DB_HOST=localhost
-    - DB_DATABASE=demo
-    - DB_USERNAME=root
-    - DB_PASSWORD=root
+  image: framgia/laravel-workspace
   commands:
-    - supervisord &
+    - sleep 10
     - chmod -R 777 storage/
     - chmod -R 777 bootstrap/cache/
-    - cp .env.testing .env
     - composer install
-    - sleep 15
-    - mysql -u$DB_USERNAME -p$DB_PASSWORD -e "CREATE DATABASE $DB_DATABASE CHARACTER SET utf8;"
-    - php artisan migrate
+    - npm install
+    - gulp
+    - cp .env.cd .env
+    - php artisan migrate --database=mysql_test
     - vendor/bin/phpunit
+compose:
+  database:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: demo
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: root
 cache:
   mount:
     - .git
     - vendor
+    - node_modules
