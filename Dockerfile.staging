@@ -1,9 +1,5 @@
-FROM framgia/laravel
-ENV DB_HOST=localhost DB_DATABASE=demo DB_USERNAME=root DB_PASSWORD=root
-COPY . /var/www/html
-RUN service mysql start \
-    && cp .env.staging .env \
-    && mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE CHARACTER SET utf8;" \
-    && chmod -R 777 storage \
-    && chmod -R 777 bootstrap/cache \
-    && php artisan migrate --force
+FROM debian
+COPY . /var/www/laravel
+RUN cd /var/www/laravel && cp .env.staging .env
+
+WORKDIR /var/www/laravel

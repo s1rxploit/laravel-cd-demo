@@ -7,7 +7,7 @@ build:
     - composer install
     - npm install
     - gulp
-    - cp .env.cd .env
+    - cp .env.testing .env
     - php artisan migrate --database=mysql_test
     - vendor/bin/phpunit
 compose:
@@ -18,8 +18,30 @@ compose:
       MYSQL_USER: test
       MYSQL_PASSWORD: test
       MYSQL_ROOT_PASSWORD: root
+publish:
+  docker:
+    storage_path: /drone/docker
+    when:
+      branch: develop
+    username: $$DOCKER_USERNAME
+    password: $$DOCKER_PASSWORD
+    email: $$DOCKER_EMAIL
+    repo: framgia/laravel-cd-demo
+    file: Dockerfile.staging
+    tag: staging
+  docker:
+    storage_path: /drone/docker
+    when:
+      branch: [master, release]
+    username: $$DOCKER_USERNAME
+    password: $$DOCKER_PASSWORD
+    email: $$DOCKER_EMAIL
+    repo: framgia/laravel-cd-demo
+    file: Dockerfile.production
+    tag: latest
 cache:
   mount:
     - .git
     - vendor
     - node_modules
+    - /drone/docker
