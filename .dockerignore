@@ -1,1 +1,2 @@
-docker-build/*
+.git
+node_modules
