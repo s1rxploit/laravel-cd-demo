@@ -39,6 +39,32 @@ publish:
     repo: framgia/laravel-cd-demo
     file: Dockerfile.production
     tag: latest
+deploy:
+  rancher:
+    url: $$RANCHER_URL
+    access_key: $$RANCHER_ACCESS_KEY
+    secret_key: $$RANCHER_SECRET_KEY
+    service: $$RANCHER_SERVICE_STAGING
+    docker_image: framgia/laravel-cd-demo:staging
+    when:
+      branch: develop
+  rancher:
+    url: $$RANCHER_URL
+    access_key: $$RANCHER_ACCESS_KEY
+    secret_key: $$RANCHER_SECRET_KEY
+    service: $$RANCHER_SERVICE_PRODUCTION
+    docker_image: framgia/laravel-cd-demo:latest
+    confirm: true
+    when:
+      branch: [master, release]
+notify:
+  email:
+    from: $$EMAIL_FROM
+    host: $$EMAIL_HOST
+    username: $$EMAIL_USERNAME
+    password: $$EMAIL_PASSWORD
+    recipients:
+      - $$EMAIL_RECIPIENTS
 cache:
   mount:
     - .git
