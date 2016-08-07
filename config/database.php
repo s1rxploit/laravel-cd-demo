@@ -123,9 +123,9 @@ return [
         'cluster' => false,
 
         'default' => [
-            'host' => env('REDIS_HOST', 'localhost'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', 6379),
+            'host' => env('APP_REDIS_HOST', 'localhost'),
+            'password' => env('APP_REDIS_PASSWORD', null),
+            'port' => env('APP_REDIS_PORT', 6379),
             'database' => 0,
         ],
 
