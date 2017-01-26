@@ -21,50 +21,40 @@ compose:
 publish:
   docker:
     storage_path: /drone/docker
+    registry: antic.website:5000
     when:
       branch: develop
-    username: $$DOCKER_USERNAME
-    password: $$DOCKER_PASSWORD
-    email: $$DOCKER_EMAIL
+    email: s1rxploit@gmail.com
     repo: framgia/laravel-cd-demo
     file: Dockerfile.staging
     tag: staging
   docker:
     storage_path: /drone/docker
+    registry: antic.website:5000
     when:
       branch: [master, release]
-    username: $$DOCKER_USERNAME
-    password: $$DOCKER_PASSWORD
-    email: $$DOCKER_EMAIL
+    email: s1rxploit@gmail.com
     repo: framgia/laravel-cd-demo
     file: Dockerfile.production
     tag: latest
 deploy:
   rancher:
-    url: $$RANCHER_URL
-    access_key: $$RANCHER_ACCESS_KEY
-    secret_key: $$RANCHER_SECRET_KEY
-    service: $$RANCHER_SERVICE_STAGING
-    docker_image: framgia/laravel-cd-demo:staging
+    url: http://rancher.kingofweed.top
+    access_key: EE1F9AA6A7EBF7CA1C38
+    secret_key: DQUneeM2YTjJdJ6wKWjhXPYxRY4aT8NAoyUZa7tT
+    service: RANCHER_SERVICE_STAGING
+    docker_image: antic.website:5000/framgia/laravel-cd-demo:staging
     when:
       branch: develop
   rancher:
-    url: $$RANCHER_URL
-    access_key: $$RANCHER_ACCESS_KEY
-    secret_key: $$RANCHER_SECRET_KEY
-    service: $$RANCHER_SERVICE_PRODUCTION
-    docker_image: framgia/laravel-cd-demo:latest
+    url: http://rancher.kingofweed.top
+    access_key: EE1F9AA6A7EBF7CA1C38
+    secret_key: DQUneeM2YTjJdJ6wKWjhXPYxRY4aT8NAoyUZa7tT
+    service: RANCHER_SERVICE_PRODUCTION
+    docker_image: antic.website:5000/framgia/laravel-cd-demo:latest
     confirm: true
     when:
       branch: [master, release]
-notify:
-  email:
-    from: $$EMAIL_FROM
-    host: $$EMAIL_HOST
-    username: $$EMAIL_USERNAME
-    password: $$EMAIL_PASSWORD
-    recipients:
-      - $$EMAIL_RECIPIENTS
 cache:
   mount:
     - .git
